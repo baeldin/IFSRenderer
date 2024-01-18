@@ -49,6 +49,7 @@ struct Iterator
 struct p_state
 {
 	vec4 pos;
+    vec4 p0;
 	float color_index;
 	float dummy0;
 	int iterator_index;
@@ -298,6 +299,7 @@ vec3 apply_transform(Iterator iter, p_state _p_input, inout uint next)
 {
 	//variables available in transforms:
     vec3 p = _p_input.pos.xyz;
+    vec3 p0 = _p_input.p0.xyz;
 	int iter_depth = _p_input.iteration_depth;
 
 	//snippets inserted on initialization
@@ -386,6 +388,7 @@ p_state reset_state(inout uint next)
 		rho * cos(phi),
 		0.0//unused
 	);
+    p.p0 = p.pos;
 	float workgroup_random = f_hash4(seed, gl_WorkGroupID.x, uint(dispatch_cnt), next++);
 	//p.iterator_index = int(/*random(next)*/workgroup_random * settings.itnum);
 	p.iterator_index = alias_sample(workgroup_random);
